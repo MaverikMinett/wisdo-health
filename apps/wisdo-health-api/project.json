@@ -1,0 +1,56 @@
+{
+  "name": "wisdo-health-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/wisdo-health-api/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/wisdo-health-api",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/wisdo-health-api/src/main.ts",
+        "tsConfig": "apps/wisdo-health-api/tsconfig.app.json",
+        "assets": ["apps/wisdo-health-api/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "wisdo-health-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "wisdo-health-api:build:development"
+        },
+        "production": {
+          "buildTarget": "wisdo-health-api:build:production"
+        }
+      }
+    }
+  }
+}
