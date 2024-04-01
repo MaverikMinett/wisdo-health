@@ -1,0 +1,171 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Wisdo Health",
+    "description": "Node/Express/Mongoose",
+    "version": "1.0.1"
+  },
+  "servers": [
+    {
+    "url": "./",
+    "description": "Wisdo Health API"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Post",
+      "description": "Allow user to make posts to their communities"
+    },
+    {
+      "name": "Feed",
+      "description": "Recommended posts"
+    }
+  ],
+  "paths": {
+    "/post": {
+      "post": {
+        "summary": "Create a post",
+        "tags": ["Post"],
+        "requestBody": {
+          "description": "Create a post",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCreateView"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/feed": {
+      "get": {
+        "summary": "Get user's recommended posts",
+        "tags": ["Feed"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feed"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Feed": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/FeedPost"
+        }
+      },          
+      "FeedPost": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "author": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "image": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            }
+          },
+          "community": {
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "image": {
+                "type": "string"
+              }
+            }
+          },
+          "likes": {
+            "type": "number"
+          },
+          "weight": {
+            "type": "number"
+          }
+        }
+      },
+      "PostCreateView": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "community": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

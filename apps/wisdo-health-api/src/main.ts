@@ -1,6 +1,7 @@
 import cors from 'cors';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
+import fs from 'fs';
 import { log } from './middleware/log.middleware';
 
 const env = process.env.ENV ?? 'dev';
@@ -16,12 +17,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({origin: '*'}));
 
+if (env !== 'prod') {
+  app.use('/api', express.static('./apps/wisdo-health-api/src/assets/swagger') );
+
+  app.get('/api/swagger.json', (req: Request, res: Response ) => {
+    let content = fs.readFileSync(`./apps/wisdo-health-api/src/swagger.json`);
+    res.write( content )
+    res.end()
+    return;
+  })
+}
+
 app.use('*', (req, res) => {
   res.status(404).send('404 Page not found');
 })
 
 const main = async() => {
-
   try {
     await mongoose.connect(mongo_db_uri);
     console.log('Connected to database');
