@@ -4,7 +4,10 @@ import mongoose from 'mongoose';
 import fs from 'fs';
 
 import { log } from './middleware/log.middleware';
+import { authMiddleware } from './middleware/auth.middleware';
 import { loadFixtures } from './fixtures';
+import { apiRouter } from './api/api.routes';
+
 
 const env = process.env.ENV ?? 'dev';
 const host = process.env.HOST ?? 'localhost';
@@ -14,7 +17,7 @@ const mongo_db_uri = 'mongodb://127.0.0.1:27017/wisdo-health';
 const app = express();
 
 /* enable logging */
-app.use(log );
+app.use(log);
 
 /* prepare application */
 app.use(express.json());
@@ -32,6 +35,9 @@ if (env !== 'prod') {
     return;
   })
 }
+
+app.use(authMiddleware);
+app.use('/api', apiRouter);
 
 app.use('*', (req, res) => {
   res.status(404).send('404 Page not found');
