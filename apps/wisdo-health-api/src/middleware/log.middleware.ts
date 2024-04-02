@@ -1,7 +1,7 @@
 
 import { Request, Response, NextFunction } from 'express'
 
-export function log( request: Request, response: Response, next: NextFunction ) {
+export const log = (request: Request, response: Response, next: NextFunction) => {
   response.on('finish', () => {
     const { method, url } = request;
     const { statusCode, statusMessage } = response;

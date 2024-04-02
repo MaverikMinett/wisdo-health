@@ -2,7 +2,9 @@ import cors from 'cors';
 import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import fs from 'fs';
+
 import { log } from './middleware/log.middleware';
+import { loadFixtures } from './fixtures';
 
 const env = process.env.ENV ?? 'dev';
 const host = process.env.HOST ?? 'localhost';
@@ -11,12 +13,15 @@ const mongo_db_uri = 'mongodb://127.0.0.1:27017/wisdo-health';
 
 const app = express();
 
-/* logging */
+/* enable logging */
 app.use(log );
+
+/* prepare application */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({origin: '*'}));
 
+/* enable swagger documentation */
 if (env !== 'prod') {
   app.use('/api', express.static('./apps/wisdo-health-api/src/assets/swagger') );
 
@@ -37,8 +42,15 @@ const main = async() => {
     await mongoose.connect(mongo_db_uri);
     console.log('Connected to database');
   } catch (error) {
-    console.log(`Error connecting to database ${mongo_db_uri}`);
+    console.log(`Error connecting to database ${mongo_db_uri}`, error);
     process.exit(1);
+  }
+
+  try {
+    await loadFixtures();
+    console.log('Testing data reset')
+  } catch(error) {
+    console.log(`Error loading database fixtures`, error);
   }
 
   app.listen(port, host, () => {
