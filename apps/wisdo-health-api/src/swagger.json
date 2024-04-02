@@ -137,9 +137,6 @@
           },
           "community": {
             "properties": {
-              "_id": {
-                "type": "string"
-              },
               "title": {
                 "type": "string"
               },
@@ -149,9 +146,6 @@
             }
           },
           "likes": {
-            "type": "number"
-          },
-          "weight": {
             "type": "number"
           }
         }

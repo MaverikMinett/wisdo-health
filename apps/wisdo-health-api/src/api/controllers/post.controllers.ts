@@ -1,5 +1,5 @@
 import Joi, { ValidationError } from 'joi';
-import { Request, Response } from "express"
+import { Response } from "express"
 import { AuthenticatedRequest } from '../../interfaces/AuthenticatedRequest';
 import { INewPostParams } from '../../interfaces/IPost';
 import { MAX_POST_SUMMARY_LENGTH_IN_WORDS, MAX_POST_TITLE_LENGTH_IN_CHARS } from '../../constants';

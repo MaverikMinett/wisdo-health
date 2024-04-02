@@ -8,7 +8,7 @@ const communitySchema = new Schema<ICommunity>({
     unique: true
   },
   image: {
-    String
+    type: String
   },
   memberCount: { 
     type: Number,

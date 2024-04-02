@@ -31,3 +31,35 @@ export interface ICreatePostParams {
 export interface ICreatePostResponse {
   _id: Types.ObjectId
 }
+
+export interface IFeedPostDocument extends Omit<IPost,'author'|'community'> {
+  author: {
+    _id: Types.ObjectId;
+    image?: string;
+    name: string;
+    country: string;
+  };
+  community: {
+    _id: Types.ObjectId;
+    title: string;
+    image?: string;
+  }
+}
+
+export interface IFeedPost {
+  _id: Types.ObjectId;
+  title: string;
+  summary: string;
+  body: string;
+  author: {
+    _id: Types.ObjectId;
+    image?: string;
+    name: string;
+    country: string;
+  };
+  community: {
+    title: string;
+    image?: string;
+  };
+  likes: number;
+}
