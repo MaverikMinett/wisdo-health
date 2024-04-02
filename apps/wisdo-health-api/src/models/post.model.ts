@@ -15,6 +15,10 @@ const postSchema = new Schema<IPost>({
     type: String, 
     required: true 
   },
+  bodyLength: {
+    type: Number,
+    required: true
+  },
   author: { 
     type: Schema.Types.ObjectId, 
     ref: 'User', 

@@ -18,9 +18,11 @@ export const newPost = async (auth: Auth, params: INewPostParams) => {
     throw new HttpException(403, 'You do not have permission to post to this community');
   }
 
+  const bodyWords = params.body.split(' ');
+  const bodyLength = bodyWords.length;
+
   if (! params.summary || params.summary.match(/^\s+$/)) {
-    const bodyWords = params.body.split(' ');
-    params.summary = bodyWords.length > DEFAULT_POST_SUMMARY_LENGTH_IN_WORDS
+    params.summary = bodyLength > DEFAULT_POST_SUMMARY_LENGTH_IN_WORDS
       ? bodyWords.slice(0,DEFAULT_POST_SUMMARY_LENGTH_IN_WORDS).join(' ')
       : params.body;
   }
@@ -29,6 +31,7 @@ export const newPost = async (auth: Auth, params: INewPostParams) => {
     title: params.title,
     summary: params.summary,
     body: params.body,
+    bodyLength: bodyLength,
     author: auth.user._id,
     community: community._id,
     weight: params.body.length * POST_LENGTH_WEIGHT

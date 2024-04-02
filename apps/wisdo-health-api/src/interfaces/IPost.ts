@@ -5,6 +5,7 @@ export interface IPost extends Document {
   title: string;
   summary: string;
   body: string;
+  bodyLength: number;
   author: Types.ObjectId;
   community: Types.ObjectId;
   likes: number;
@@ -23,6 +24,7 @@ export interface ICreatePostParams {
   title: string;
   summary: string;
   body: string;
+  bodyLength: number;
   author: Types.ObjectId;
   community: Types.ObjectId;
   weight: number;

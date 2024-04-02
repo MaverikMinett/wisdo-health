@@ -2,6 +2,7 @@ import { User } from './models/user.model';
 import { Community } from './models/community.model';
 import { Post } from './models/post.model';
 import { PostStatus } from './enums/post-status.enum';
+import { POST_LENGTH_WEIGHT, POST_LIKES_WEIGHT } from './constants';
 
 interface PostData {
   title: string;
@@ -40,7 +41,6 @@ const posts = [
     likes: 100,
     status: PostStatus.Active
   },
-
   {
     title: 'Post E - Pending Post',
     summary: 'Ut enim ad minima veniam, quis nostrum exercitationem',
@@ -48,10 +48,12 @@ const posts = [
     likes: 100,
     status: PostStatus.Pending
   }
-]
+];
 
-const calcWeight = (postData: PostData) => {
-  return postData.likes * 80 + postData.body.length * 20;
+const calcBodyLengthAndWeight = (postData: PostData) => {
+  const bodyLength = postData.body.split(' ').length;
+  const weight = postData.likes * POST_LIKES_WEIGHT + postData.body.length * POST_LENGTH_WEIGHT;
+  return { bodyLength, weight };
 }
 
 const clearFixtures = async () => {
@@ -103,12 +105,13 @@ const createFixtures = async () => {
   })
   await ron.save();
 
+  
   const postASameCountry = new Post({
     ...posts[0],
     author: ron,
     likes: 100,
     community: communityA,
-    weight: calcWeight(posts[0])
+    ...calcBodyLengthAndWeight(posts[0])
   });
   await postASameCountry.save()
 
@@ -117,7 +120,7 @@ const createFixtures = async () => {
     author: lidor,
     likes: 200,
     community: communityB,
-    weight: calcWeight(posts[1])
+    ...calcBodyLengthAndWeight(posts[1])
   })
   await postBOtherCountryHigherWeight.save();
 
@@ -125,7 +128,7 @@ const createFixtures = async () => {
     ...posts[2],
     author: ron,
     community: communityB,
-    weight: calcWeight(posts[2])
+    ...calcBodyLengthAndWeight(posts[2])
   })
   await postCSameCountryHigherWeight.save();
 
@@ -133,7 +136,7 @@ const createFixtures = async () => {
     ...posts[3],
     author: lidor,
     community: communityC,
-    weight: calcWeight(posts[3])
+    ...calcBodyLengthAndWeight(posts[3])
   });
   await PostDNotSubscribedCommunity.save();
 
@@ -141,7 +144,7 @@ const createFixtures = async () => {
     ...posts[4],
     author: lidor,
     community: communityA,
-    weight: calcWeight(posts[4])
+    ...calcBodyLengthAndWeight(posts[4])
   })
   await PostEPendingPost.save();
 }
