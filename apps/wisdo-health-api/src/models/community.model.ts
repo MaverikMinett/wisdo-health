@@ -4,7 +4,8 @@ import { ICommunity } from '../interfaces/ICommunity';
 const communitySchema = new Schema<ICommunity>({
   title: { 
     type: String, 
-    required: true 
+    required: true,
+    unique: true
   },
   image: {
     String

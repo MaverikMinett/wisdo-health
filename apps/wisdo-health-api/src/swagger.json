@@ -31,7 +31,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PostCreateView"
+                "$ref": "#/components/schemas/NewPostParams"
               }
             }
           },
@@ -39,7 +39,14 @@
         },
         "responses": {
           "201": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePostResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request",
@@ -149,7 +156,7 @@
           }
         }
       },
-      "PostCreateView": {
+      "NewPostParams": {
         "type": "object",
         "properties": {
           "title": {
@@ -162,6 +169,14 @@
             "type": "string"
           },
           "community": {
+            "type": "string"
+          }
+        }
+      },
+      "CreatePostResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
             "type": "string"
           }
         }
